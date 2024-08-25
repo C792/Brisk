@@ -1,3 +1,3 @@
 # Brisk - Minimal Local Music Player
 
-## Made by Tauri and Vanilla HTML/CSS/JS
+## Made by Iansong w/ Tauri and Vanilla HTML/CSS/JS
