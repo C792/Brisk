@@ -81,7 +81,8 @@ function updatesong() {
   invoke('readdata').then((data) => {
     const sdata = JSON.parse(data);
     const currentsong = sdata.songs[sdata.playlists[local.playlistidx].songs[local.songidx]];
-    audio.src = currentsong.src;
+    // audio.src = currentsong.src;
+    audio.src = convertFileSrc(currentsong.src);
     document.body.getElementsByClassName("pltitle")[0].innerHTML = sdata.playlists[local.playlistidx].title;
     document.body.getElementsByClassName("songtitle")[0].innerHTML = currentsong.title;
     audio.volume = Number(currentsong.volume);
