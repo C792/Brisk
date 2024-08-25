@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brisk</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"> -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  
+  <body>
+    <h1> <a id="turnoff"><i id="setting" class="bi bi-gear"></i></a></h1>
+    <div class="header">
+      <h1 class="left"> <a id="download"><i class="bi bi-file-earmark-arrow-down"></i></a></h1>
+      <h1 class="left"> <a id="addsong"><i class="bi bi-bookmark-plus"></i></a></h1>
+    </div>
+    <div class="download uip" id="download-menu">
+      <input type="text" id="link" placeholder="Enter link" autocomplete="off" />
+      <div class="dual">
+        <input type="text" id="title" placeholder="Enter title" autocomplete="off" />
+        <!-- <button id="dl">Download</button> -->
+         <button class="popup" id="dl"><i class="bi bi-check2-square"></i></button>
+      </div>
+    </div>
+    <div class="wrapper paused">
+      <p class="clock black"></p>
+      <button class="screen" id="playbutton">
+        <p class="clock"></p>
+      </button>
+    </div>
+    <div class="center">
+      <h3 class="pltitle"></h3>
+    </div>
+    <div class="center">
+      <h3 class="songtitle"></h3>
+    </div>
+    <div class="rightsidebar">
+      <p id="volume-value">0</p>
+      <div id="volume-box">
+        <div id="volume-bar"></div>
+      </div>
+      <i class="bi" id="volume-icon"></i>
+    </div>  
+    <div id="righttrigger"></div>
+    <div class="leftsidebar">
+      <button><i class="bi bi-shuffle" id="shuffle"></i></button>
+      <button><i class="bi bi-repeat" id="loop"></i></button>
+      <button><i class="bi bi-music-note-list" id="save"></i></button>
+    </div>
+    <div id="lefttrigger"></div>
+    <div class="playlist uiip" id="plc">
+      <div id="playlist"></div>
+    </div>
+    <div class="playlist songlist uiip" id="slc">
+      <div id="songlist"></div>
+    </div>
+    <div class="progress" id="progress">
+      <div id="progress-bar"></div>
+      <p id="timestamp"></p>
+    </div>
+    <div id="progresstrigger"></div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

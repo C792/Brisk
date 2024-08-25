@@ -1,0 +1,19 @@
+{
+  "name": "brisk",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "tsv": "live-server src --port=5555 --no-browser",
+    "tauri-front": "live-server src --port=5555"
+  },
+  "devDependencies": {
+    "@tauri-apps/api": "^1.6.0",
+    "@tauri-apps/cli": "^1.6.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "live-server": "^1.2.2"
+  }
+}

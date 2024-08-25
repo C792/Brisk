@@ -1,0 +1,57 @@
+{
+  "build": {
+    "devPath": "../src",
+    "distDir": "../src",
+    "withGlobalTauri": true,
+    "beforeDevCommand": "yarn tsv"
+  },
+  "package": {
+    "productName": "brisk",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "window": {
+        "setFullscreen": true,
+        "setTitle": true
+      },
+      "protocol": {
+        "all": true,
+        "asset": true,
+        "assetScope": ["**"]
+      },
+      "path": {
+        "all": true
+      }
+    },
+    "windows": [
+      {
+        "title": "brisk",
+        "width": 800,
+        "height": 600,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "dangerousDisableAssetCspModification": ["style-src", "font-src", "script-src"],
+      "csp": "default-src 'self'; script-src-elem 'self' https://cdnjs.cloudflare.com/; style-src 'self' https://cdn.jsdelivr.net/ https://cdnjs.cloudflare.com/; font-src 'self' https://fastly.jsdelivr.net/ https://cdn.jsdelivr.net/; media-src 'self' asset: https://asset.localhost"
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.brisk.app",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ]
+    }
+  }
+}
