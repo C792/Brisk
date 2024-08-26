@@ -6,8 +6,6 @@
     <title>Brisk</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-    <!-- <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"> -->
     <link rel="stylesheet" href="styles.css" />
   </head>
   
@@ -18,10 +16,9 @@
       <h1 class="left"> <a id="addsong"><i class="bi bi-bookmark-plus"></i></a></h1>
     </div>
     <div class="download uip" id="download-menu">
-      <input type="text" id="link" placeholder="Enter link" autocomplete="off" />
+      <input type="text" id="link" placeholder="Enter Audio Link" autocomplete="off" />
       <div class="dual">
-        <input type="text" id="title" placeholder="Enter title" autocomplete="off" />
-        <!-- <button id="dl">Download</button> -->
+        <input type="text" id="title" placeholder="Enter title(will be link's title if you leave it blank)" autocomplete="off" />
          <button class="popup" id="dl"><i class="bi bi-check2-square"></i></button>
       </div>
     </div>
@@ -32,10 +29,10 @@
       </button>
     </div>
     <div class="center">
-      <h3 class="pltitle">PLAYLIST TITLE Symphony Beethoven Dvorak</h3>
+      <h3 class="pltitle"></h3>
     </div>
     <div class="center">
-      <h3 class="songtitle">Symphony St. Petersberg Berlin London Pathetique</h3>
+      <h3 class="songtitle"></h3>
     </div>
     <div class="rightsidebar">
       <p id="volume-value">0</p>

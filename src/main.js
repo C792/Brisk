@@ -141,6 +141,12 @@ const dlmenu = document.getElementById("download-menu");
 const plc = document.getElementById('plc');
 const slc = document.getElementById('slc');
 
+function CloseAllTop() {
+  plc.classList.add("uiip");
+  slc.classList.add("uiip");
+  dlmenu.classList.add("uip");
+}
+
 const timestamp = document.getElementById('timestamp');
 const sec = () => {
   const currentTime = audio.currentTime;
@@ -216,7 +222,7 @@ progresstrigger.addEventListener('click', function(e) {
 
 let isfullscreen = false;
 
-document.addEventListener('keydown', function(e) { if (e.code == 'Space') TogglePlay(); });
+document.addEventListener('keydown', function(e) { if (e.code == 'Space') { if (document.activeElement.tagName != 'INPUT') TogglePlay(); }});
 document.addEventListener('keydown', function(e) { if (e.key == 'Home' || e.key == '0') audio.currentTime = 0; });
 document.addEventListener('keydown', function(e) { if (e.key == 'End' || e.key == '-') audio.currentTime = audio.duration; });
 document.addEventListener('keydown', function(e) { if (e.key == 'ArrowRight') audio.currentTime += 5; });
@@ -231,14 +237,16 @@ document.addEventListener('keydown', function(e) {
 });
 
 {// !!DEBUG!!
-  document.addEventListener('keydown', function(e) { if (e.code === 'Digit1') console.log(local); });
-  document.addEventListener('keydown', function(e) {
-    if (e.code === 'Digit2') {
-      invoke('save', { key: 'shuffle', data: `${local.shuffle}` });
-      invoke('save', { key: 'loop', data: `${local.loop}` });
-      invoke('save', { key: 'songidx', data: `${local.songidx}` });
-    }
-  });
+  if (false) {
+    document.addEventListener('keydown', function(e) { if (e.code === 'Digit1') console.log(local); });
+    document.addEventListener('keydown', function(e) {
+      if (e.code === 'Digit2') {
+        invoke('save', { key: 'shuffle', data: `${local.shuffle}` });
+        invoke('save', { key: 'loop', data: `${local.loop}` });
+        invoke('save', { key: 'songidx', data: `${local.songidx}` });
+      }
+    });
+  }
 }
 
 function AddPlaylistButton() {
@@ -289,7 +297,7 @@ lefttrigger.addEventListener('click', function(e) {
                 function (plname) {
                   if (plname != "") {
                     invoke('add_playlist', { songIdx: 0, title: plname });
-                    pl.classList.add('uiip');
+                    plc.classList.add('uiip');
                     plc.removeChild(plc.lastChild);
                     console.log(`added playlist ${plname}`);
                     const li = document.createElement('div');
@@ -298,7 +306,6 @@ lefttrigger.addEventListener('click', function(e) {
                     pl.appendChild(li);
                     i += 1;
                     plc.appendChild(AddPlaylistButton());
-                    
                     return true;
                   }
                   else return false;
@@ -333,7 +340,6 @@ lefttrigger.addEventListener('click', function(e) {
   }
 });
 
-
 const volumeIcon = document.getElementById('volume-icon');
 const volumebar = document.getElementById('volume-bar');
 const volumebox = document.getElementById('volume-box');
@@ -352,17 +358,13 @@ righttrigger.addEventListener('click', function(e) {
       volumeIcon.classList.remove('bi-volume-up');
       volumeIcon.classList.add('bi-volume-mute');
     }
-  }
-  else {
+  } else {
     let voo = ((volumebox.getBoundingClientRect().bottom - e.clientY) / volumebox.offsetHeight).toFixed(2);
     voo = voo < 0 ? 0 : voo > 1 ? 1 : voo;
     local.volume = voo;
     volumevalue.innerHTML = `${Math.floor(audio.volume * 100)}`;
-    // volumebar.style.height = `${local.volume * 100}%`;
   }
   volumebar.style.height = `${audio.volume * 100}%`;
-
-  // invoke('save', { key: 'volume', data: `${local.volume}` });
 });
 
 document.getElementById("turnoff").addEventListener("click", function () {
@@ -375,26 +377,25 @@ document.getElementById("turnoff").addEventListener("click", function () {
 
 document.getElementById("download").addEventListener("click", function () {
   if (dlmenu.classList.contains("uip")) {
+    CloseAllTop();
     dlmenu.classList.remove("uip");
-    plc.classList.add("uiip");
-    slc.classList.add("uiip");
-  }
-  else dlmenu.classList.add("uip");
+  } else CloseAllTop();
 });
 
 document.getElementById("dl").addEventListener("click", function () {
   const url = document.getElementById("link").value;
   const title = document.getElementById("title").value;
-  invoke('download', { urlVideo: url, title: title });
-  // invoke('save_song', { title: title, src: title + '.mp3', link: url, volume: 1 });
+  invoke('download', { urlVideo: url, title: title }).then((data) => {
+    document.getElementById("link").value = '';
+    document.getElementById("title").value = '';
+  });
   invoke('save_playlist_init');
 });
 
 document.getElementById("addsong").addEventListener("click", function () {
   if (slc.classList.contains("uiip")) {
+    CloseAllTop();
     slc.classList.remove("uiip");
-    plc.classList.add("uiip");
-    dlmenu.classList.add("uip");
     invoke('get_songs').then((data) => {
       let i = 0;
       const songs = data.split(sep);
@@ -436,33 +437,15 @@ document.getElementById("addsong").addEventListener("click", function () {
       });
     });
   }
-  else slc.classList.add("uiip");
+  else CloseAllTop();
 });
 
 
 { // mouseover things
-  righttrigger.addEventListener('mouseover', function() {
-    rightsidebar.classList.add('show');
-  });
-
-  righttrigger.addEventListener('mouseout', function() {
-    rightsidebar.classList.remove('show');
-  });
-
-  progresstrigger.addEventListener('mouseover', function(e) {
-    progressBox.classList.add('show');
-  });
-
-  progresstrigger.addEventListener('mouseout', function(e) {
-    progressBox.classList.remove('show');
-  });
-
-  lefttrigger.addEventListener('mouseover', function() {
-    leftsidebar.classList.add('show');
-  });
-
-  lefttrigger.addEventListener('mouseout', function() {
-    leftsidebar.classList.remove('show');
-  });
+  righttrigger.addEventListener('mouseover', function() { rightsidebar.classList.add('show'); });
+  righttrigger.addEventListener('mouseout', function() { rightsidebar.classList.remove('show'); });
+  progresstrigger.addEventListener('mouseover', function() { progressBox.classList.add('show'); });
+  progresstrigger.addEventListener('mouseout', function() { progressBox.classList.remove('show'); });
+  lefttrigger.addEventListener('mouseover', function() { leftsidebar.classList.add('show'); });
+  lefttrigger.addEventListener('mouseout', function() { leftsidebar.classList.remove('show'); });
 }
-
