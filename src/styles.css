@@ -32,6 +32,8 @@ body {
   margin: 0;
   padding: 20px;
   height: calc(100vh - 40px);
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 h1 {
