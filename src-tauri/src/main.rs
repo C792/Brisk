@@ -196,11 +196,16 @@ fn readdata() -> Result<String, String> {
 #[tauri::command]
 async fn download(url_video: String, title: String) -> String {
     let video = Video::new(url_video.clone()).unwrap();
-    let path = std::path::Path::new("./audio/").join(title.clone() + ".mp3");
+    // check title and if none, use video title
+    let mut ctitle = title.clone();
+    if title == "" {
+        ctitle = video.get_info().await.unwrap().video_details.title;
+    }
+    let path = std::path::Path::new("./audio/").join(ctitle.clone() + ".mp3");
     video.download(path.clone()).await.unwrap();
-    let abs = std::env::current_dir().unwrap().display().to_string().replace("\\","/") + "/audio/" + &title + ".mp3";
+    let abs = std::env::current_dir().unwrap().display().to_string().replace("\\","/") + "/audio/" + &ctitle + ".mp3";
     println!("Downloading to {:?}", abs.clone());
-    save_song(title.clone(), abs.clone(), url_video.clone(), 1.0);
+    save_song(ctitle.clone(), abs.clone(), url_video.clone(), 1.0);
     return abs.clone();
 }
 
