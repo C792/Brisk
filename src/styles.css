@@ -81,7 +81,7 @@ div {
 
 p.clock {
   font-family: Clock;
-  font-size: 100px;
+  font-size: calc(7.5vw + 40px);
   text-align: center;
   position: fixed;
   top: 50%;
@@ -98,8 +98,8 @@ div.wrapper {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 455px;
-  height: 175px;
+  width: calc(135px + 40vw);
+  height: calc(40vh - 65px);
   /* padding: 30px; */
   border-radius: 10px;
   background: linear-gradient(300deg, #c595ff, #4d75ac, #9ff9dc);
@@ -139,8 +139,8 @@ button.screen {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 430px;
-  height: 150px;
+  width: calc(122px + 38.5vw);
+  height: calc(35vh - 60px);
   border-radius: 5px;
   outline: none;
   border: none;
@@ -171,12 +171,12 @@ div.center {
 .songtitle, .pltitle {
   display: block;
   font-family: "DM Serif", serif;
-  font-size: 30px;
+  font-size: calc(10px + 2.5vw);
   text-align: center;
   margin: 0;
   background: none;
-  margin-top: 80px;
-  margin-bottom: 115px;
+  margin-top: calc(16vh - 12px);
+  margin-bottom: calc(30vh - 70px);
   z-index: 3;
 }
 
