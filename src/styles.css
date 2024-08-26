@@ -251,6 +251,15 @@ div.leftsidebar button i {
   color: #999;
 }
 
+button.double {
+  margin-bottom: -7.5px !important;
+  display: flex !important;
+}
+
+button.double i {
+  color: #fff !important;
+}
+
 div#volume-box {
   position: relative;
   width: 15px;

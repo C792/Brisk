@@ -94,6 +94,24 @@ function updatesong() {
   invoke('save', { key: 'songidx', data: `${local.songidx}` });
 }
 
+function NextSong() {
+  invoke('readdata').then((data) => {
+    const sdata = JSON.parse(data);
+    local.songidx = (local.songidx + 1) % sdata.playlists[local.playlistidx].songs.length;
+    console.log(local.songidx);
+    invoke('save', { key: 'songidx', data: `${local.songidx}` });
+  });
+}
+
+function PrevSong() {
+  invoke('readdata').then((data) => {
+    const sdata = JSON.parse(data);
+    local.songidx = (local.songidx - 1 + sdata.playlists[local.playlistidx].songs.length) % sdata.playlists[local.playlistidx].songs.length;
+    console.log(local.songidx);
+    invoke('save', { key: 'songidx', data: `${local.songidx}` });
+  });
+}
+
 const clock = document.querySelectorAll(".clock");
 const tick = () => {
   const now = new Date();
@@ -162,12 +180,7 @@ const sec = () => {
         outline.classList.remove("playing");
         break;
       case 1:
-        invoke('readdata').then((data) => {
-          const sdata = JSON.parse(data);
-          local.songidx = (local.songidx + 1) % sdata.playlists[local.playlistidx].songs.length;
-          console.log(local.songidx);
-          invoke('save', { key: 'songidx', data: `${local.songidx}` });
-        });
+        NextSong();
         updatesong();
         break;
       case 2:
@@ -256,9 +269,27 @@ function AddPlaylistButton() {
   return li;
 }
 
+function PlaylistDiv(i, playlist) {
+  const li = document.createElement('div');
+  li.classList.add('dual');
+  li.classList.add(`${i}`);
+  li.innerHTML = `<button class="playlist">${playlist}</button><button class="popup edit" id="${i}"><i class="bi bi-pencil-square"></i></button><button class="popup trash" id="${i}"><i class="bi bi-trash"></i></button>`;
+  return li;
+}
+
+function SonginPlDiv(i, song) {
+  const li = document.createElement('div');
+  li.classList.add('dual');
+  li.classList.add(`${i}`);
+  li.innerHTML = `<button class="playlist">${song}</button><button class="popup trash" id="${i}"><i class="bi bi-trash"></i></button>`;
+  return li;
+}
+
 const shuffle = document.getElementById('shuffle');
 const loop = document.getElementById('loop');
 const playlistbtn = document.getElementById('save');
+const skipbtn = document.getElementById('skip');
+const prevbtn = document.getElementById('prev');
 
 lefttrigger.addEventListener('click', function(e) {
   if (mouseisin(e, loop)) {
@@ -277,11 +308,7 @@ lefttrigger.addEventListener('click', function(e) {
         const playlists = data.split(sep);
         plc.innerHTML = '';
         playlists.forEach((playlist) => {
-          const li = document.createElement('div');
-          li.classList.add('dual');
-          li.classList.add(`${i}`);
-          li.innerHTML = `<button class="playlist">${playlist}</button><button class="popup trash" id="${i}"><i class="bi bi-trash"></i></button>`;
-          plc.appendChild(li);
+          plc.appendChild(PlaylistDiv(i, playlist));
           i += 1;
         });
         plc.appendChild(AddPlaylistButton());
@@ -300,12 +327,9 @@ lefttrigger.addEventListener('click', function(e) {
                     plc.classList.add('uiip');
                     plc.removeChild(plc.lastChild);
                     console.log(`added playlist ${plname}`);
-                    const li = document.createElement('div');
-                    li.classList.add('dual');
-                    li.innerHTML = `<button class="playlist">${plname}</button><button class="popup trash" id="${i}"><i class="bi bi-trash"></i></button>`;
-                    pl.appendChild(li);
-                    i += 1;
+                    pl.appendChild(PlaylistDiv(i, plname));
                     plc.appendChild(AddPlaylistButton());
+                    i += 1;
                     return true;
                   }
                   else return false;
@@ -329,14 +353,68 @@ lefttrigger.addEventListener('click', function(e) {
           tb.addEventListener('click', function(e) {
             let el = e.target;
             if (e.target.classList.contains("bi")) el = e.target.parentElement;
-            // console.log(el);
             invoke('delete_playlist', { playlistIdx: Number(el.id) });
-            document.getElementsByClassName(el.id)[0].remove();
             console.log(`deleted playlist ${el.id}`);
+            document.querySelectorAll('button.trash').forEach((pl) => {
+              if (Number(pl.id) > Number(el.id)) {
+                pl.id = Number(pl.id) - 1;
+              }
+            });
+            document.querySelectorAll('button.edit').forEach((eb) => {
+              if (Number(eb.id) > Number(el.id)) {
+                eb.id = Number(eb.id) - 1;
+              }
+            });
+            el.parentElement.remove();
+          });
+        });
+        document.querySelectorAll("button.edit").forEach((eb) => {
+          eb.addEventListener('click', function(e) {
+            let el = e.target;
+            if (e.target.classList.contains("bi")) el = e.target.parentElement;
+            let curplidx = Number(el.id);
+            CloseAllTop();
+            slc.classList.remove('uiip');
+            invoke('plsongs', { plidx: Number(curplidx) }).then((data) => {
+              let i = 0;
+              const songs = data.split(sep);
+              slc.innerHTML = '';
+              invoke('get_songs').then((data) => {
+                let sdata = data.split(sep);
+                songs.forEach((song) => {
+                  slc.appendChild(SonginPlDiv(i, sdata[Number(song)]));
+                  i += 1;
+                });
+                console.log(`editing playlist ${curplidx}`);
+                console.log(document.querySelectorAll('button.trash'));
+                document.querySelectorAll('button.trash').forEach((ttb) => {
+                  ttb.addEventListener('click', function(e) {
+                    console.log(e.target);
+                    let el = e.target;
+                    if (e.target.classList.contains("bi")) el = e.target.parentElement;
+                    invoke('playlist_pop', { plidx: Number(curplidx), sidx: Number(el.id) });
+                    console.log(`deleted song ${el.id}`);
+                    // adjust song index in playlist
+                    document.querySelectorAll('button.trash').forEach((tr) => {
+                      if (Number(tr.id) > Number(el.id)) {
+                        tr.id = Number(tr.id) - 1;
+                      }
+                    });
+                    el.parentElement.remove();
+                  });
+                });
+              });
+            });
           });
         });
       });
     } else plc.classList.add('uiip');
+  } else if (mouseisin(e, skipbtn)) {
+    NextSong();
+    updatesong();
+  } else if (mouseisin(e, prevbtn)) {
+    PrevSong();
+    updatesong();
   }
 });
 
