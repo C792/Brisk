@@ -184,6 +184,38 @@ fn playlist_append(playlist_idx: usize, song_idx: usize) {
 }
 
 #[tauri::command]
+fn playlist_pop(plidx: usize, sidx: usize) {
+    let mut map = match std::fs::read_to_string(DATA_PATH) {
+        Ok(file) => serde_json::from_str(&file).unwrap(),
+        Err(_) => serde_json::Map::new(),
+    };
+    let playlists = map["playlists"].as_array_mut().unwrap();
+    let playlist = playlists[plidx].as_object_mut().unwrap();
+    let songs = playlist["songs"].as_array_mut().unwrap();
+    songs.remove(sidx);
+    let json = serde_json::to_string_pretty(&map).unwrap();
+    std::fs::write(DATA_PATH, json).unwrap();
+}
+
+#[tauri::command]
+fn plsongs(plidx: usize) -> String {
+    let map = match std::fs::read_to_string(DATA_PATH) {
+        Ok(file) => serde_json::from_str(&file).unwrap(),
+        Err(_) => serde_json::Map::new(),
+    };
+    let playlists = map["playlists"].as_array().unwrap();
+    let playlist = playlists[plidx].as_object().unwrap();
+    let songs = playlist["songs"].as_array().unwrap();
+    let mut song_titles = Vec::new();
+    for song in songs {
+        let title = song.as_u64().unwrap();
+        song_titles.push(title.to_string());
+    }
+    let ret = song_titles.join("@].$/");
+    return ret;
+}
+
+#[tauri::command]
 fn readcurrent() -> Result<String, String> {
     return std::fs::read_to_string(CONFIG_PATH).map_err(|e| e.to_string());
 }
@@ -211,7 +243,7 @@ async fn download(url_video: String, title: String) -> String {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![init, save, readcurrent, readdata, download, save_song, get_songs, save_playlist_init, add_playlist, get_playlist, delete_playlist, playlist_append])
+        .invoke_handler(tauri::generate_handler![init, save, readcurrent, readdata, download, save_song, get_songs, save_playlist_init, add_playlist, get_playlist, delete_playlist, playlist_append, plsongs, playlist_pop])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
