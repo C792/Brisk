@@ -3,7 +3,7 @@
 Brisk persues for the top-notch in minimalistic UI design.
 
 ## Made by Iansong w/ Tauri and Vanilla HTML/CSS/JS
-
+![](./docs/images/interface.png)
 ## How to use
 
 1. Donwload .exe file or Installer on **Release Page**.
@@ -21,6 +21,18 @@ Brisk persues for the top-notch in minimalistic UI design.
 |Seek to end|End|
 |Increase Volume by 5%|↑|
 |Decrease Volume by 5%|↓|
+
+### Interface
+
+Light blue outline indicates that the audioback is paused, and Violet is playing.
+![](./docs/images/indicator.png)
+Volume bar is on the left side, which appears when mouse is near the edge.
+![](./docs/images/left.png)
+Right side has the controller.
+![](./docs/images/right.png)
+Bottom has the Timestamp.
+![](./docs/images/bottom.png)
+Gear button will simplify the interface.
 
 ### Well-Optimized Application
 Using Rust as Backend and Native HTML Renderer (Microsoft WebView2), the application is optimized to use minimum of CPU and RAM despite harming UX.
