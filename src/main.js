@@ -447,10 +447,9 @@ righttrigger.addEventListener('click', function(e) {
 
 document.getElementById("turnoff").addEventListener("click", function () {
   let ar = document.querySelectorAll(".clock");
-  ar.forEach((clock) => {
-    if (clock.classList.contains("hide")) clock.classList.remove("hide");
-    else clock.classList.add("hide");
-  });
+  ar.forEach((clock) => { clock.classList.toggle("hide"); });
+  document.querySelectorAll("h3").forEach((h3) => { h3.classList.toggle("hide"); });
+  document.getElementsByClassName("header")[0].classList.toggle("hide");
 });
 
 document.getElementById("download").addEventListener("click", function () {
