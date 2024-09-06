@@ -25,13 +25,21 @@ Brisk persues for the top-notch in minimalistic UI design.
 ### Interface
 
 Light blue outline indicates that the audioback is paused, and Violet is playing.
+
 ![](./docs/images/indicator.png)
+
 Volume bar is on the left side, which appears when mouse is near the edge.
+
 ![](./docs/images/left.png)
+
 Right side has the controller.
+
 ![](./docs/images/right.png)
+
 Bottom has the Timestamp.
+
 ![](./docs/images/bottom.png)
+
 Gear button will simplify the interface.
 
 ### Well-Optimized Application
