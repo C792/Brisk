@@ -1,8 +1,7 @@
-const { invoke } = window.__TAURI__.tauri;
+const { invoke } = window.__TAURI__.core;
 const { appDataDir, join } = window.__TAURI__.path;
-// import { appWindow } from '@tauri-apps/api/window';
 const { appWindow } = window.__TAURI__.window;
-const { convertFileSrc } = window.__TAURI__.tauri;
+const { convertFileSrc } = window.__TAURI__.core;
 
 const appDataDirPath = await appDataDir();
 
