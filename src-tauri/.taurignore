@@ -1,3 +1,9 @@
+audio/*
 ./audio/*
+../audio/*
+config/*
 ./config/*
+../config/*
 ../docs/*
+data.json
+current.json

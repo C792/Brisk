@@ -1,6 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 
-use rusty_ytdl::Video;
+use std::process::Command;
 
 const CONFIG_PATH: &str = "./config/current.json";
 const DATA_PATH: &str = "./config/data.json";
@@ -224,14 +224,32 @@ fn readdata() -> Result<String, String> {
 
 #[tauri::command]
 async fn download(url_video: String, title: String) -> String {
-    let video = Video::new(url_video.clone()).unwrap();
-    // check title and if none, use video title
+    let url = String::from(url_video.clone());
+    let output_dir = std::path::Path::new("./audio/");
+
+    let titlecmd = Command::new("yt-dlp")
+        .arg("--get-title")
+        .arg(url.clone())
+        .output()
+        .expect("Failed to execute yt-dlp command");
+    let vtitle = String::from_utf8_lossy(&titlecmd.stdout).trim().to_string();
     let mut ctitle = title.clone();
+    
     if title == "" {
-        ctitle = video.get_info().await.unwrap().video_details.title;
+        ctitle = vtitle.clone();
     }
-    let path = std::path::Path::new("./audio/").join(ctitle.clone() + ".mp3");
-    video.download(path.clone()).await.unwrap();
+
+    let mut dlcmd = Command::new("yt-dlp")
+        .arg("-x")
+        .arg("--audio-format")
+        .arg("mp3")
+        .arg("--output")
+        .arg(format!("{}/{}.%(ext)s", output_dir.display(), ctitle))
+        .arg(url.clone())
+        .spawn()
+        .expect("Failed to execute yt-dlp command");
+    let _ = dlcmd.wait().expect("yt-dlp command wasn't running");
+
     let abs = std::env::current_dir().unwrap().display().to_string().replace("\\","/") + "/audio/" + &ctitle + ".mp3";
     println!("Downloading to {:?}", abs.clone());
     save_song(ctitle.clone(), abs.clone(), url_video.clone(), 1.0);
