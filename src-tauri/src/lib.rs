@@ -240,6 +240,7 @@ async fn download(url_video: String, title: String) -> String {
     }
 
     let mut dlcmd = Command::new("yt-dlp")
+        .arg("-q")
         .arg("-x")
         .arg("--audio-format")
         .arg("mp3")
