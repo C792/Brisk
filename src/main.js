@@ -49,6 +49,7 @@ function updateshuffle(shuffleicon, status) {
 }
 
 const audio = new Audio();
+let songlink = document.getElementById('songlink');
 invoke('init');
 invoke('readcurrent').then((_data) => {
   let cdata = JSON.parse(_data);
@@ -60,7 +61,7 @@ invoke('readcurrent').then((_data) => {
     console.log(`current song: ${currentsong.src}`);
     audio.src = convertFileSrc(currentsong.src);
     console.log(`audio src: ${audio.src}`);
-
+    songlink.innerText = currentsong.link;
     audio.volume = Number(currentsong.volume);
     local.volume = Number(currentsong.volume);
     document.getElementById('volume-value').innerHTML = `${Math.floor(audio.volume * 100)}`;
@@ -155,6 +156,7 @@ const rightsidebar = document.getElementsByClassName('rightsidebar')[0];
 const lefttrigger = document.getElementById('lefttrigger');
 const leftsidebar = document.getElementsByClassName('leftsidebar')[0];
 const dlmenu = document.getElementById("download-menu");
+const songtitle = document.getElementsByClassName("songtitle")[0];
 const plc = document.getElementById('plc');
 const slc = document.getElementById('slc');
 
@@ -524,4 +526,7 @@ document.getElementById("addsong").addEventListener("click", function () {
   progresstrigger.addEventListener('mouseout', function() { progressBox.classList.remove('show'); });
   lefttrigger.addEventListener('mouseover', function() { leftsidebar.classList.add('show'); });
   lefttrigger.addEventListener('mouseout', function() { leftsidebar.classList.remove('show'); });
+  songtitle.addEventListener('click', function() {
+    navigator.clipboard.writeText(songlink.innerText);
+  });
 }
