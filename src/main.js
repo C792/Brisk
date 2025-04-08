@@ -1,6 +1,6 @@
 const { invoke } = window.__TAURI__.core;
 const { appDataDir, join } = window.__TAURI__.path;
-const { appWindow } = window.__TAURI__.window;
+const appWindow = window.__TAURI__.window;
 const { convertFileSrc } = window.__TAURI__.core;
 
 const appDataDirPath = await appDataDir();
@@ -12,7 +12,7 @@ let local = {
   shuffle: 0,
   volume: 0,
   playlistidx: 0,
-  songidx: 0,
+  songidx: 0, 
   ismute: 0,
 }
 
@@ -245,7 +245,7 @@ document.addEventListener('keydown', function(e) { if (e.key == 'ArrowUp') local
 document.addEventListener('keydown', function(e) { if (e.key == 'ArrowDown') local.volume = Math.max(0, (((local.volume * 20).toFixed(0) - 1) / 20).toFixed(2)); });
 document.addEventListener('keydown', function(e) {
   if (e.key == 'F11') {
-    appWindow.setFullscreen(isfullscreen);
+    appWindow.getCurrentWindow().setFullscreen(isfullscreen);
     isfullscreen = !isfullscreen;
   }
 });
