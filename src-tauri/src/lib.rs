@@ -195,7 +195,7 @@ fn playlist_pop(plidx: usize, sidx: usize) {
 }
 
 #[tauri::command]
-fn plsongs(plidx: usize) -> String {
+fn get_playlist_songs(plidx: usize) -> String {
     let map = match std::fs::read_to_string(DATA_PATH) {
         Ok(file) => serde_json::from_str(&file).unwrap(),
         Err(_) => serde_json::Map::new(),
@@ -261,7 +261,7 @@ async fn download(url_video: String, title: String) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![init, save, readcurrent, readdata, download, save_song, get_songs, save_playlist_init, add_playlist, get_playlist, delete_playlist, playlist_append, plsongs, playlist_pop])
+        .invoke_handler(tauri::generate_handler![init, save, readcurrent, readdata, download, save_song, get_songs, save_playlist_init, add_playlist, get_playlist, delete_playlist, playlist_append, get_playlist_songs, playlist_pop])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

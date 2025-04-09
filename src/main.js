@@ -5,8 +5,6 @@ const { convertFileSrc } = window.__TAURI__.core;
 
 const appDataDirPath = await appDataDir();
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-
 let local = {
   loop: 0,
   shuffle: 0,
@@ -159,11 +157,72 @@ const dlmenu = document.getElementById("download-menu");
 const songtitle = document.getElementsByClassName("songtitle")[0];
 const plc = document.getElementById('plc');
 const slc = document.getElementById('slc');
+const splc = document.getElementById('splc');
 
 function CloseAllTop() {
   plc.classList.add("uiip");
   slc.classList.add("uiip");
+  splc.classList.add("uiip");
   dlmenu.classList.add("uip");
+}
+
+function AppendSonglist(l_el, add, pl) {
+  if (l_el.classList.contains("uiip")) {
+    CloseAllTop();
+    l_el.classList.remove("uiip");
+    invoke('get_playlist_songs', { plidx: local.playlistidx }).then((pdata) => {
+      invoke('get_songs').then((data) => {
+        let i = 0;
+        let songs = data.split(sep);
+        let sdata = pdata.split(sep);
+        if (pl) {
+          let tmp = [];
+          sdata.forEach((song) => {
+            tmp.push(songs[Number(song)]);
+          });
+          songs = tmp;
+        }
+        l_el.innerHTML = '';
+        songs.forEach((song) => {
+          const li = document.createElement('div');
+          li.classList.add('dual');
+          if (add == 1) li.innerHTML = `<button class="songlist" id="${i}">${song}</button><button class="songbtn popup"><i class="bi bi-plus"></i></button>`;
+          else if (add == 0) li.innerHTML = `<button class="songlist" id="${i}">${song}</button>`;
+          l_el.appendChild(li);
+          i += 1;
+        });
+        document.querySelectorAll('button.songlist').forEach((sl) => {
+          sl.addEventListener('click', function(e) {
+            let el = e.target;
+            if (e.target.classList.contains("bi")) el = e.target.parentElement;
+            invoke('readdata').then((data) => {
+              audio.pause();
+              local.songidx = songs.indexOf(el.innerHTML);
+              local.playlistidx = 0;
+              console.log(`changed to song ${local.songidx}`);
+              invoke('save', { key: 'songidx', data: `${local.songidx}` });
+              invoke('save', { key: 'playlistidx', data: `${local.playlistidx}` });
+              updatesong();
+            });
+          });
+        });
+        document.querySelectorAll('button.songbtn').forEach((sb) => {
+          sb.addEventListener('click', function(e) {
+            let el = e.target;
+            if (e.target.classList.contains("bi")) el = e.target.parentElement;
+            invoke('readdata').then((data) => {
+              const sdata = JSON.parse(data);
+              const songidx = songs.indexOf(el.previousElementSibling.innerHTML);
+              const song = sdata.songs[songidx];
+              invoke('playlist_append', { playlistIdx: local.playlistidx, songIdx: songidx });
+              console.log(`added song ${song.title} to playlist ${local.playlistidx}`);
+            });
+          });
+        });
+      });
+    });
+  }
+  else CloseAllTop();
 }
 
 const timestamp = document.getElementById('timestamp');
@@ -376,7 +435,7 @@ lefttrigger.addEventListener('click', function(e) {
             let curplidx = Number(el.id);
             CloseAllTop();
             slc.classList.remove('uiip');
-            invoke('plsongs', { plidx: Number(curplidx) }).then((data) => {
+            invoke('get_playlist_songs', { plidx: Number(curplidx) }).then((data) => {
               let i = 0;
               const songs = data.split(sep);
               slc.innerHTML = '';
@@ -453,6 +512,10 @@ document.getElementById("turnoff").addEventListener("click", function () {
   document.getElementsByClassName("header")[0].classList.toggle("hide");
 });
 
+document.getElementById("showsong").addEventListener("click", function () {
+  AppendSonglist(splc, false, true);
+});
+
 document.getElementById("download").addEventListener("click", function () {
   if (dlmenu.classList.contains("uip")) {
     CloseAllTop();
@@ -471,51 +534,7 @@ document.getElementById("dl").addEventListener("click", function () {
 });
 
 document.getElementById("addsong").addEventListener("click", function () {
-  if (slc.classList.contains("uiip")) {
-    CloseAllTop();
-    slc.classList.remove("uiip");
-    invoke('get_songs').then((data) => {
-      let i = 0;
-      const songs = data.split(sep);
-      slc.innerHTML = '';
-      songs.forEach((song) => {
-        const li = document.createElement('div');
-        li.classList.add('dual');
-        li.innerHTML = `<button class="songlist" id="${i}">${song}</button><button class="songbtn popup"><i class="bi bi-plus"></i></button>`;
-        slc.appendChild(li);
-        i += 1;
-      });
-      document.querySelectorAll('button.songlist').forEach((sl) => {
-        sl.addEventListener('click', function(e) {
-          let el = e.target;
-          if (e.target.classList.contains("bi")) el = e.target.parentElement;
-          invoke('readdata').then((data) => {
-            audio.pause();
-            local.songidx = songs.indexOf(el.innerHTML);
-            local.playlistidx = 0;
-            console.log(`changed to song ${local.songidx}`);
-            invoke('save', { key: 'songidx', data: `${local.songidx}` });
-            invoke('save', { key: 'playlistidx', data: `${local.playlistidx}` });
-            updatesong();
-          });
-        });
-      });
-      document.querySelectorAll('button.songbtn').forEach((sb) => {
-        sb.addEventListener('click', function(e) {
-          let el = e.target;
-          if (e.target.classList.contains("bi")) el = e.target.parentElement;
-          invoke('readdata').then((data) => {
-            const sdata = JSON.parse(data);
-            const songidx = songs.indexOf(el.previousElementSibling.innerHTML);
-            const song = sdata.songs[songidx];
-            invoke('playlist_append', { playlistIdx: local.playlistidx, songIdx: songidx });
-            console.log(`added song ${song.title} to playlist ${local.playlistidx}`);
-          });
-        });
-      });
-    });
-  }
-  else CloseAllTop();
+  AppendSonglist(slc, true, false);
 });
 
 
