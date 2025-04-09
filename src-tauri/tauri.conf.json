@@ -10,7 +10,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "brisk",
+        "title": "Brisk",
         "width": 800,
         "height": 600
       }

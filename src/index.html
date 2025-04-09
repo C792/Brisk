@@ -10,15 +10,20 @@
   </head>
   
   <body>
-    <h1> <a id="turnoff"><i id="setting" class="bi bi-gear"></i></a></h1>
-    <div class="header">
-      <h1 class="left"> <a id="download"><i class="bi bi-file-earmark-arrow-down"></i></a></h1>
+    <h1 style="visibility: hidden;">.</h1>
+    <div class="rightheader">
+      <h1><a id="turnoff"><i id="setting" class="bi bi-gear"></i></a></h1>
+      <h1 style="visibility: hidden;">.</h1>
+      <h1><a id="download"><i class="bi bi-cloud-arrow-down"></i></a></h1>
+    </div>
+    <div class="leftheader">
+      <h1 class="left"> <a id="showsong"><i class="bi bi-file-earmark-text"></i></a></h1>
       <h1 class="left"> <a id="addsong"><i class="bi bi-bookmark-plus"></i></a></h1>
     </div>
     <div class="download uip" id="download-menu">
       <input type="text" id="link" placeholder="Enter Audio Link" autocomplete="off" />
       <div class="dual">
-        <input type="text" id="title" placeholder="Enter title(default: link's title)" autocomplete="off" />
+        <input type="text" id="title" placeholder="Enter title(default: video's title)" autocomplete="off" />
          <button class="popup" id="dl"><i class="bi bi-check2-square"></i></button>
       </div>
     </div>
@@ -30,6 +35,7 @@
     </div>
     <h3 class="pltitle"></h3>
     <h3 class="songtitle"></h3>
+    <h3 id="songlink"></h3>
     <div class="rightsidebar">
       <p id="volume-value">0</p>
       <div id="volume-box">
@@ -50,6 +56,9 @@
     </div>
     <div class="playlist songlist uiip" id="slc">
       <div id="songlist"></div>
+    </div>
+    <div class="playlist songlist uiip" id="splc">
+      <div id="psonglist"></div>
     </div>
     <div class="progress" id="progress">
       <div id="progress-bar"></div>

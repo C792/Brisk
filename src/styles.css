@@ -26,6 +26,10 @@
   color: white;
 }
 
+h2 {
+  font-family: "DM Serif";
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -47,7 +51,12 @@ h1.left {
   text-align: left;
 }
 
-div.header {
+div.rightheader {
+  position: absolute;
+  left: 20px;
+}
+
+div.leftheader {
   position: absolute;
   right: 20px;
 }
@@ -180,6 +189,16 @@ div.center {
   margin-top: calc(16vh - 12px);
   margin-bottom: calc(29vh - 70px);
   z-index: 3;
+}
+
+.songtitle {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#songlink {
+  display: none;
 }
 
 div.rightsidebar {
