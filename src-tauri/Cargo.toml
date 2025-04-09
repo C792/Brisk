@@ -1,6 +1,6 @@
 [package]
 name = "brisk"
-version = "1.1.0"
+version = "1.1.1"
 description = "A Minimal Local Music Player"
 authors = ["iansong"]
 edition = "2024"
