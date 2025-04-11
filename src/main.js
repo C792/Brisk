@@ -80,6 +80,7 @@ function updatesong() {
     const sdata = JSON.parse(data);
     const currentsong = sdata.songs[sdata.playlists[local.playlistidx].songs[local.songidx]];
     // audio.src = currentsong.src;
+    songlink.innerText = currentsong.link;
     audio.src = convertFileSrc(currentsong.src);
     document.body.getElementsByClassName("pltitle")[0].innerHTML = sdata.playlists[local.playlistidx].title;
     document.body.getElementsByClassName("songtitle")[0].innerHTML = currentsong.title;
@@ -166,7 +167,7 @@ function CloseAllTop() {
   dlmenu.classList.add("uip");
 }
 
-function AppendSonglist(l_el, add, pl) {
+function AppendSonglist(l_el, add, pl) { // button 3 and 4
   if (l_el.classList.contains("uiip")) {
     CloseAllTop();
     l_el.classList.remove("uiip");
@@ -198,7 +199,7 @@ function AppendSonglist(l_el, add, pl) {
             invoke('readdata').then((data) => {
               audio.pause();
               local.songidx = songs.indexOf(el.innerHTML);
-              local.playlistidx = 0;
+              if (!pl) local.playlistidx = 0;
               console.log(`changed to song ${local.songidx}`);
               invoke('save', { key: 'songidx', data: `${local.songidx}` });
               invoke('save', { key: 'playlistidx', data: `${local.playlistidx}` });
@@ -369,6 +370,7 @@ lefttrigger.addEventListener('click', function(e) {
         plc.innerHTML = '';
         playlists.forEach((playlist) => {
           plc.appendChild(PlaylistDiv(i, playlist));
+          if (i == 0) plc.innerHTML = '';
           i += 1;
         });
         plc.appendChild(AddPlaylistButton());
