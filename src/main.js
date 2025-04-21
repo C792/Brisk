@@ -361,9 +361,8 @@ lefttrigger.addEventListener('click', function(e) {
     invoke('save', { key: 'shuffle', data: `${local.shuffle}` });
   } else if (mouseisin(e, playlistbtn)) {
     if (plc.classList.contains('uiip')) {
+      CloseAllTop();
       plc.classList.remove('uiip');
-      slc.classList.add('uiip');
-      dlmenu.classList.add('uip');
       invoke('get_playlist').then((data) => {
         let i = 0;
         const playlists = data.split(sep);
