@@ -184,11 +184,16 @@ function AppendSonglist(l_el, add, pl) { // button 3 and 4
           songs = tmp;
         }
         l_el.innerHTML = '';
-        songs.forEach((song) => {
+        let s_songs = songs.map((song, i) => {
+          return { song, i };
+        }).sort((a, b) => {
+          return a.song.localeCompare(b.song);
+        });
+        s_songs.forEach((pair) => {
           const li = document.createElement('div');
           li.classList.add('dual');
-          if (add == 1) li.innerHTML = `<button class="songlist" id="${i}">${song}</button><button class="songbtn popup"><i class="bi bi-plus"></i></button>`;
-          else if (add == 0) li.innerHTML = `<button class="songlist" id="${i}">${song}</button>`;
+          if (add == 1) li.innerHTML = `<button class="songlist" id="${pair.i}">${pair.song}</button><button class="songbtn popup"><i class="bi bi-plus"></i></button>`;
+          else if (add == 0) li.innerHTML = `<button class="songlist" id="${pair.i}">${pair.song}</button>`;
           l_el.appendChild(li);
           i += 1;
         });
